@@ -1,0 +1,9 @@
+.idea/
+__pycache__/
+.pytest_cache/
+.venv/
+*.egg-info/
+.*.sw[p-z]
+.mypy_cache/
+.coverage
+*.orig
