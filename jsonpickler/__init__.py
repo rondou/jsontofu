@@ -14,6 +14,11 @@ def decode(res: Any, clazz: Any) -> T:
 
     obj = jsonpickle.decode(json.dumps(res))
     for prop, value in vars(obj).items():
+        if type(value) is list:
+            for i, v in enumerate(value):
+                arg_clazz = clazz.__annotations__[prop].__args__[0]
+                value[i] = decode(v, arg_clazz)
+
         if type(value) is dict:
             prop_clazz = clazz.__annotations__[prop]
             if (prop_clazz is Any): continue
