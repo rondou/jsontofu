@@ -113,6 +113,8 @@ setup(
         'jsonpickle',
     ],
 
+    python_requires='>=3.6',
+
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
     # syntax, for example:
