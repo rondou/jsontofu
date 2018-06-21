@@ -8,7 +8,7 @@ Usage
         test_str: str
         test_int: int
 
-    obj = jsonpickler.decode({'test_str': 'test', 'test_int': 123}, Data)
+    obj = jsontofu.decode({'test_str': 'test', 'test_int': 123}, Data)
 
     # Now you can call test_str like this
     obj.test_str
@@ -18,13 +18,13 @@ Installation
 
 .. code:: sh
 
-    pip install git+git://github.com/rondou/jsonpickler.git
+    pip install git+git://github.com/rondou/jsontofu.git
 
 or
 
 .. code:: sh
 
-    pipenv install 'git+ssh://git@github.com/rondou/jsonpickler.git#egg=jsonpickler'
+    pipenv install 'git+ssh://git@github.com/rondou/jsontofu.git#egg=jsontofu'
 
 
 Development
@@ -41,4 +41,4 @@ Coverage
 
 .. code:: sh
 
-    pipenv run 'pytest tests --cov=jsonpickler'
+    pipenv run 'pytest tests --cov=jsontofu'
