@@ -32,20 +32,26 @@ def test_empty():
     assert obj is not None
 
 def test_nested():
-    obj = jsontofu.decode('''{"test_str": "data", "test": {}}''', NestedData)
+    obj = jsontofu.decode('''{"test_str": "data", "data": {}}''', NestedData)
 
     try:
-        obj == NestedData(test_str="test", data=Data(test_str="test", test_int=0))
+        obj != NestedData(test_str="test", data=Data(test_str="test", test_int=0))
     except:
         assert True
     else:
         assert False
 
 def test_optional():
-    obj = jsontofu.decode('''{"test_str": "test", "data": {}}''', OptionalData)
-    obj2 = OptionalData(test_str="test", data={})
+    obj = jsontofu.decode('''{"test_str": "test"}''', OptionalData)
+    obj2 = OptionalData(test_str="test")
 
     assert obj == obj2
+
+def test_optional_empty():
+    obj = jsontofu.decode('''{"test_str": "test", "data": {}}''', OptionalData)
+    assert obj != OptionalData(test_str="test")
+    assert obj == OptionalData(test_str="test", data={})
+    assert obj != OptionalData(test_str="test", data=None)
 
 def test_invalid():
     try:
