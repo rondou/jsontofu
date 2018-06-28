@@ -16,10 +16,36 @@ class ListData:
     test_str: str
     test_list: List[Data]
 
+@dataclass
+class OptionalData:
+    test_str: str
+    data: Optional[Data] = None
+
+@dataclass
+class NestedData:
+    test_str: str
+    data: Data
+
 def test_empty():
     obj = jsontofu.decode('''{}''', Data)
 
     assert obj is not None
+
+def test_nested():
+    obj = jsontofu.decode('''{"test_str": "data", "test": {}}''', NestedData)
+
+    try:
+        obj == NestedData(test_str="test", data=Data(test_str="test", test_int=0))
+    except:
+        assert True
+    else:
+        assert False
+
+def test_optional():
+    obj = jsontofu.decode('''{"test_str": "test", "data": {}}''', OptionalData)
+    obj2 = OptionalData(test_str="test", data={})
+
+    assert obj == obj2
 
 def test_invalid():
     try:
