@@ -1,3 +1,5 @@
+.. image:: jsontofu.png
+
 Usage
 -----
 
