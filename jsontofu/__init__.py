@@ -10,6 +10,10 @@ def _type_full_name(clazz: Any) -> str:
 
 def decode(res: Any, clazz: Any) -> T:
     res = json.loads(res) if type(res) is str else res
+
+    if len(res.keys()) == 0:
+        return None
+
     res['py/object'] = _type_full_name(clazz)
 
     obj = jsonpickle.decode(json.dumps(res))
