@@ -82,3 +82,19 @@ def test_list():
     obj = jsontofu.decode('''{"test_str": "test", "test_list": [{"test_str": "abc", "test_int": 11}]}''', ListData)
 
     assert obj == ListData(test_str="test", test_list=[Data(test_str="abc", test_int=11)])
+
+def test_type_check_str():
+    try:
+        jsontofu.decode('''{"test_str": 0, "test_list": [{"test_str": "abc", "test_int": 11}]}''', ListData)
+    except:
+        assert True
+    else:
+        assert False
+
+def test_type_check_int():
+    try:
+        jsontofu.decode('''{"test_str": "test", "test_list": [{"test_str": "abc", "test_int": ""}]}''', ListData)
+    except:
+        assert True
+    else:
+        assert False
