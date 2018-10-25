@@ -11,17 +11,33 @@ def _type_full_name(clazz: Any) -> str:
 def decode(res: Any, clazz: Any) -> T:
     res = json.loads(res) if type(res) is str else res
 
-    if len(res.keys()) == 0:
+    if not res:
         return None
+
+    try:
+        clazz.__name__
+    except:
+        return res
 
     res['py/object'] = _type_full_name(clazz)
 
     obj = jsonpickle.decode(json.dumps(res))
+
+    if type(obj) is dict:
+        obj.pop('py/object', None)
+        return obj
+
     for prop, value in vars(obj).items():
         if type(value) is list:
             for i, v in enumerate(value):
+                if type(v) is str: continue
+                if type(v) is int: continue
+                if type(v) is bool: continue
+                if type(v) is float: continue
+
                 arg_clazz = clazz.__annotations__[prop].__args__[0]
                 value[i] = decode(v, arg_clazz)
+
 
         prop_clazz = clazz.__annotations__[prop]
         if type(value) is dict:
