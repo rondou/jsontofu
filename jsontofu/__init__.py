@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
-import jsonpickle
 import json
-from typing import Any, Callable, Dict, List, Optional, Union, NewType, Iterable, TypeVar
+import jsonpickle
+
+from typing import Any, Callable, Dict, List, Optional, Union, NewType, Iterable, TypeVar, Union
 
 T = TypeVar('T')
 
 def _type_full_name(clazz: Any) -> str:
     return ".".join([clazz.__module__, clazz.__name__])
 
+
 def decode(res: Any, clazz: Any) -> T:
     res = json.loads(res) if type(res) is str else res
 
     if not res:
         return None
+
+    if type(clazz) is type(Union):
+        clazz = clazz.__args__[0]
 
     try:
         clazz.__name__

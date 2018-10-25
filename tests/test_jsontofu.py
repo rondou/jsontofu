@@ -96,6 +96,12 @@ def test_nested():
     assert obj != NestedData(test_str="data")
     assert True
 
+def test_optional2():
+    obj = jsontofu.decode('''{"test_str": "test", "data":{"test_str": "nm", "test_int": 1}}''', OptionalData)
+
+    assert obj == OptionalData(test_str='test', data=Data(test_str='nm', test_int=1))
+
+
 def test_optional():
     obj = jsontofu.decode('''{"test_str": "test"}''', OptionalData)
     obj2 = OptionalData(test_str="test")
