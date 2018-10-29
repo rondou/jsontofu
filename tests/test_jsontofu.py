@@ -56,6 +56,70 @@ class Meta:
 class UserInfo:
     account: UserAccount
 
+class MetaNone:
+    ty: str
+    func: Optional[str] = None
+    cmd: Optional[str] = None
+    concurrent: Optional[bool] = None
+    rtype: Optional[str] = 'json'
+    path: Optional[str] = None
+    args: Optional[List] = None
+    kwargs: Optional[Dict] = None
+
+    def __init__(self,
+                ty: str,
+                func: Optional[str] = None,
+                cmd: Optional[str] = None,
+                concurrent: Optional[bool] = None,
+                rtype: Optional[str] = 'json',
+                path: Optional[str] = None,
+                args: Optional[List] = None,
+                kwargs: Optional[Dict] = None):
+
+        self.ty = ty
+        self.func = func
+        self.concurrent = concurrent
+        self.rtype = rtype
+        self.path = path
+        self.args = args
+        self.kwargs = kwargs
+
+def test_no_dataclass():
+    obj = jsontofu.decode('''{
+      "ty": "shell",
+      "func": "memory_info",
+      "args": [],
+      "kwargs": {},
+      "rtype": "string",
+      "concurrent": true
+    }''', MetaNone)
+
+    obj2 = jsontofu.decode('''{
+      "ty": "built_in",
+      "func": "memory_info",
+      "cmd": "aux",
+      "args": [],
+      "kwargs": {},
+      "rtype": "json",
+      "path": "/root/home",
+      "concurrent": true
+    }''', MetaNone)
+
+    assert obj.cmd == None
+    assert obj.func == obj2.func
+    assert obj.args == obj2.args
+    assert obj.kwargs == None
+    assert obj.ty == "shell"
+    assert obj.rtype == "string"
+    assert obj.concurrent == True
+    assert obj.path != "/root/home"
+
+    assert obj2.cmd == "aux"
+    assert obj2.path == "/root/home"
+    assert obj2.rtype == "json"
+    assert obj2.rtype != obj.rtype
+    assert obj2.ty == "built_in"
+
 def test_meta():
     obj = jsontofu.decode('''{"type": "built_in", "func": "memory_info", "args": [1, 2, 3], "kwargs": {"a": "123"}, "rtype": "json", "concurrent": false}''', Meta)
     assert obj == Meta(type='built_in', func='memory_info', rtype='json', concurrent=False, args=[1, 2, 3], kwargs={'a': '123'})
