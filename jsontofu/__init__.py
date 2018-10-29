@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import sys
 import json
 import jsonpickle
 
+import typing
 from typing import Any, Callable, Dict, List, Optional, Union, NewType, Iterable, TypeVar, Union
 
 T = TypeVar('T')
@@ -16,7 +18,11 @@ def decode(res: Any, clazz: Any) -> T:
     if not res:
         return None
 
-    if type(clazz) is type(Union):
+    uni_on = type(Union)
+    if sys.version_info >= (3,7):
+        uni_on = typing._GenericAlias
+
+    if type(clazz) is uni_on:
         clazz = clazz.__args__[0]
 
     try:
