@@ -198,8 +198,8 @@ def test_int_str():
     assert obj.test_int == 123
 
 def test_list2():
-    obj = jsontofu.decode('''{"test_str": "test", "test_list": ["1"]}''', ListData2)
-    assert obj == ListData2(test_str="test", test_list=["1"])
+    obj = jsontofu.decode('''{"test_str": "test", "test_list": ["1", 1, true]}''', ListData2)
+    assert obj == ListData2(test_str="test", test_list=["1", 1, True])
 
 def test_list():
     obj = jsontofu.decode('''{"test_str": "test", "test_list": [{"test_str": "abc", "test_int": 11}]}''', ListData)
