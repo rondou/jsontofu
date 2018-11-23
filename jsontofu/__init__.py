@@ -32,6 +32,25 @@ def _validate_match_type(res, v_type):
     #    assert type(value) == dict
 
 
+def _pull_out_jsonpickle_magic_key(res):
+    res.pop('py/object', None)
+    for k in res.keys():
+        if type(res[k]) is dict:
+            _pull_out_jsonpickle_magic_key(res[k])
+
+        if type(res[k]) is list:
+            for v in res[k]:
+                if type(v) is dict:
+                    _pull_out_jsonpickle_magic_key(v)
+
+
+def encode(res: Any) -> T:
+    frozen = json.loads(jsonpickle.encode(res))
+    _pull_out_jsonpickle_magic_key(frozen)
+
+    return frozen
+
+
 def decode(res: Any, clazz: Any) -> T:
     res = json.loads(res) if type(res) is str else res
 
@@ -51,7 +70,7 @@ def decode(res: Any, clazz: Any) -> T:
     obj = jsonpickle.decode(json.dumps(res))
 
     if type(obj) is dict:
-        obj.pop('py/object', None)
+        _pull_out_jsonpickle_magic_key(obj)
         return obj
 
     for prop, value in vars(obj).items():

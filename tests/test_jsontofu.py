@@ -221,3 +221,22 @@ def test_type_check_int():
         assert True
     else:
         assert False
+
+def test_encode():
+    frozen = jsontofu.encode(jsontofu.decode('''{"test_str": "test", "test_int": 123}''', Data))
+    assert frozen == {"test_str": "test", "test_int": 123}
+
+    frozen = jsontofu.encode(jsontofu.decode('''{"account": {"user_id": "12", "account_id": "34", "location_id": "56", "group_id": "78"}}''', UserInfo))
+    assert frozen == {"account": {"user_id": "12", "account_id": "34", "location_id": "56", "group_id": "78"}}
+
+    frozen = jsontofu.encode(jsontofu.decode('''{"test_str": "test", "test_list": [{"test_str": "abc", "test_int": 11}]}''', ListData))
+    assert frozen == {"test_str": "test", "test_list": [{"test_str": "abc", "test_int": 11}]}
+
+    frozen = jsontofu.encode(jsontofu.decode('''{"test_str": "test", "test_list": ["1", 1, true]}''', ListData2))
+    assert frozen == {"test_str": "test", "test_list": ["1", 1, True]}
+
+    frozen = jsontofu.encode(jsontofu.decode('''{"test_str": "test", "data":{"test_str": "nm", "test_int": 1}}''', OptionalData))
+    assert frozen == {"test_str": "test", "data":{"test_str": "nm", "test_int": 1}}
+
+    frozen = jsontofu.encode(jsontofu.decode('''{"type": "built_in", "func": "memory_info", "args": [1, 2, 3], "kwargs": {"a": "123"}, "rtype": "json", "concurrent": false}''', Meta))
+    assert frozen == {"type": "built_in", "func": "memory_info", "args": [1, 2, 3], "kwargs": {"a": "123"}, "rtype": "json", "concurrent": False}
