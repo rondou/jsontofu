@@ -7,13 +7,40 @@ Usage
 
     @dataclass
     class Data:
-        test_str: str
-        test_int: int
-
-    obj = jsontofu.decode({'test_str': 'test', 'test_int': 123}, Data)
-
-    # Now you can call test_str like this
-    obj.test_str
+        str_data: str
+        int_data: int
+        
+    @dataclass
+    class DictData:
+        str_data: str
+        dict_data: Optional[Dict]
+        
+    @dataclass
+    class RecursiveData:
+        str_data: str
+        dict_data: Data
+        
+    json_data1 = {
+        'str_data': 'test',
+        'int_data': 123
+    }
+             
+    json_data2 = {, 
+        'str_data': 'test',
+        'dict_data': {'key1': 123, 'key2': 456}
+    }
+        
+    json_data3 = {, 
+        'str_data': 'test',
+        'dict_data': {'str_data': 'test', 'int_data': 456}
+    }
+    
+    print(jsontofu.decode(json_data1, Data)) # Data(str_data="test", int_data=123)
+    
+    print(jsontofu.decode(json_data2, DictData)) # DictData(str_data="test", dict_data={'key1': 123, 'key2': 456})
+    
+    print(jsontofu.decode(json_data3, RecursiveData)) # RecursiveData(str_data="test", Data(str_data="test", int_data=456)
+    
 
 Installation
 ------------
