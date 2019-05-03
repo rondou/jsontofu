@@ -81,12 +81,13 @@ def decode(res: Any, clazz: Any) -> T:
 
                 value[i] = decode(v, clazz.__annotations__[prop].__args__[0])
 
-        prop_clazz = clazz.__annotations__[prop]
-        if type(value) is dict:
-            if prop_clazz in (Any, List):
-                continue
-            obj.__setattr__(prop, decode(value, prop_clazz))
+        if prop in clazz.__annotations__.keys():
+            prop_clazz = clazz.__annotations__[prop]
+            if type(value) is dict:
+                if prop_clazz in (Any, List):
+                    continue
+                obj.__setattr__(prop, decode(value, prop_clazz))
 
-        _validate_match_type(value, prop_clazz)
+            _validate_match_type(value, prop_clazz)
 
     return obj

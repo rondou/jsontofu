@@ -84,6 +84,19 @@ class MetaNone:
         self.args = args
         self.kwargs = kwargs
 
+@dataclass
+class MetaLostKey:
+    type: str
+    func: str
+    rtype: str
+
+
+def test_nokey():
+    obj = jsontofu.decode('''{"type": "built_in", "func": "memory_info", "rtype": "json", "concurrent": false}''', MetaLostKey)
+    assert obj.type == "built_in"
+    assert obj.concurrent is False
+
+
 def test_no_dataclass():
     obj = jsontofu.decode('''{
       "ty": "shell",
