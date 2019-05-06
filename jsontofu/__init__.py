@@ -73,7 +73,12 @@ def decode(res: Any, clazz: Any) -> T:
         _pull_out_jsonpickle_magic_key(obj)
         return obj
 
+    remove_future = []
     for prop, value in vars(obj).items():
+        if prop not in clazz.__annotations__.keys():
+            remove_future.append(prop)
+            continue
+
         if type(value) is list:
             for i, v in enumerate(value):
                 if type(v) in BUILT_IN_TYPE:
@@ -81,13 +86,15 @@ def decode(res: Any, clazz: Any) -> T:
 
                 value[i] = decode(v, clazz.__annotations__[prop].__args__[0])
 
-        if prop in clazz.__annotations__.keys():
-            prop_clazz = clazz.__annotations__[prop]
-            if type(value) is dict:
-                if prop_clazz in (Any, List):
-                    continue
-                obj.__setattr__(prop, decode(value, prop_clazz))
+        prop_clazz = clazz.__annotations__[prop]
+        if type(value) is dict:
+            if prop_clazz in (Any, List):
+                continue
+            obj.__setattr__(prop, decode(value, prop_clazz))
 
-            _validate_match_type(value, prop_clazz)
+        _validate_match_type(value, prop_clazz)
+
+    for r in remove_future:
+        delattr(obj, r)
 
     return obj

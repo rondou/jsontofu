@@ -91,10 +91,25 @@ class MetaLostKey:
     rtype: str
 
 
+def test_dict_nokey():
+    obj = jsontofu.decode('''{"test_str": "test",
+                              "data": {"test_str": "abc", "test_int": 11, "more_key": 22}}''', OptionalData)
+
+    assert not hasattr(obj.data, 'more_key')
+
+
+def test_list_nokey():
+    obj = jsontofu.decode('''{"test_str": "test",
+                              "test_list": [{"test_str": "abc", "test_int": 11, "more_key": 22}]}''', ListData)
+
+    assert not hasattr(obj.test_list[0], 'more_key')
+    assert obj == ListData(test_str="test", test_list=[Data(test_str="abc", test_int=11)])
+
+
 def test_nokey():
     obj = jsontofu.decode('''{"type": "built_in", "func": "memory_info", "rtype": "json", "concurrent": false}''', MetaLostKey)
     assert obj.type == "built_in"
-    assert obj.concurrent is False
+    assert not hasattr(obj, 'concurrent')
 
 
 def test_no_dataclass():
