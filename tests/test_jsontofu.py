@@ -101,6 +101,19 @@ class MetaLostKey:
     rtype: str
 
 
+@dataclass
+class FloatKey:
+    test_flo: float
+    test_int: int
+
+
+def test_zero_typr():
+    obj = jsontofu.decode({"test_flo": 0, "test_int": 0}, FloatKey)
+    assert obj == FloatKey(test_flo=0, test_int=0)
+    obj = jsontofu.decode({"test_flo": 0.22, "test_int": -100}, FloatKey)
+    assert obj == FloatKey(test_flo=0.22, test_int=-100)
+
+
 def test_dict_nokey():
     obj = jsontofu.decode('''{"test_str": "test",
                               "data": {"test_str": "abc", "test_int": 11, "more_key": 22}}''', OptionalData)

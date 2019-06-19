@@ -9,6 +9,7 @@ from typing import Any, Callable, Dict, List, Optional, Union, NewType, Iterable
 T = TypeVar('T')
 BUILT_IN_TYPE = (str, int, bool, float)
 
+
 def _type_full_name(clazz: Any) -> str:
     return ".".join([clazz.__module__, clazz.__name__])
 
@@ -22,7 +23,9 @@ def _get_union_type():
 
 
 def _validate_match_type(res, v_type):
-    if v_type in BUILT_IN_TYPE:
+    if res is 0:
+        assert v_type in (float, int)
+    elif v_type in BUILT_IN_TYPE:
         assert type(res) == v_type
     #elif prop_clazz is List:
     #    assert type(value) == List
