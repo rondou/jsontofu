@@ -126,6 +126,7 @@ def test_list_nokey():
                               "test_list": [{"test_str": "abc", "test_int": 11, "more_key": 22}]}''', ListData)
 
     print('test_list_nokey')
+    print('test_list_nokey2')
     assert not hasattr(obj.test_list[0], 'more_key')
     assert obj == ListData(test_str="test", test_list=[Data(test_str="abc", test_int=11)])
 
