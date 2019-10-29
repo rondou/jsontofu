@@ -25,6 +25,8 @@ def _get_union_type():
 def _validate_match_type(res, v_type):
     if res is 0:
         assert v_type in (float, int)
+    elif res is None:
+        pass
     elif v_type in BUILT_IN_TYPE:
         assert type(res) == v_type
     #elif prop_clazz is List:

@@ -287,6 +287,12 @@ def test_type_check_int():
         assert False
 
 
+def test_none():
+    obj = jsontofu.decode('''{"test_str": null, "test_int": null}''', Data)
+    assert obj.test_str is None
+    assert obj.test_int is None
+
+
 def test_encode():
     frozen = jsontofu.encode(jsontofu.decode('''{"test_str": "test", "test_int": 123}''', Data))
     assert frozen == {"test_str": "test", "test_int": 123}
