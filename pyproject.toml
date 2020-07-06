@@ -1,0 +1,23 @@
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[tool.poetry]
+name = "jsontofu"
+version = "1.0.0"
+description = "Json raw data to object"
+authors = ["Rondou Chen <40and44sis@gmail.com>"]
+readme = "README.rst"
+homepage = "https://github.com/rondou/jsontofu"
+
+[tool.poetry.dependencies]
+python = "^3.6.7"
+jsonpickle = "*"
+
+[tool.poetry.dev-dependencies]
+dataclasses = "*"
+pytest = "*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
